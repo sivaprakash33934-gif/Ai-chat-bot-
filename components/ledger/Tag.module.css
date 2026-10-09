@@ -1,0 +1,22 @@
+.tag {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border: 1px solid var(--color-hairline);
+  color: var(--color-ink);
+  white-space: nowrap;
+  display: inline-block;
+}
+
+/* Amber marks the approval/review state via a heavier border only —
+   text stays ink to hold WCAG AA 4.5:1 at 12px (amber-on-paper fails
+   at ~3.9:1 for text; a 2px border qualifies under the 3:1 non-text
+   UI-component threshold, WCAG 1.4.11). */
+.tag[data-variant='amber'] {
+  border-width: 2px;
+  border-color: var(--color-signal-amber);
+  color: var(--color-ink);
+  font-weight: 600;
+}

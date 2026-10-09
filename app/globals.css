@@ -1,0 +1,125 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light only;
+  
+  --color-paper: #FBFBF9;
+  --color-paper-elevated: #FFFFFF;
+  --color-ink: #121210;
+  --color-ink-muted: #54565a;
+  --color-ink-faint: #8a8d91;
+  --color-hairline: rgba(18, 18, 16, 0.12);
+  
+  --color-signal-amber: #D97706;
+  --color-signal-amber-ink: #121210;
+  --color-amber-tint: #fbeedc;
+  
+  --color-success: #15803D;
+  --color-success-surface: #e9f2ec;
+  --color-error: #b3261e;
+  --color-error-surface: #faeae9;
+
+  --font-serif: "Newsreader", "Source Serif 4", Georgia, serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --touch-target: 44px;
+  --sidebar-width: 240px;
+  --topbar-height: 64px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root { color-scheme: light only; }
+}
+
+* {
+  box-shadow: none !important;
+}
+
+html, body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  min-height: 100%;
+  overflow-x: clip;
+  max-width: 100vw;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-serif);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Headings: Balanced line-wrapping to eliminate widows */
+h1, h2, h3, h4, h5, h6,
+.balance-heading {
+  text-wrap: balance;
+}
+
+/* Body prose & bullet elements: Pretty line breaks to prevent single-word orphans */
+p, li, dd, figcaption,
+.pretty-body {
+  text-wrap: pretty;
+}
+
+/* Hanging punctuation for opening quotation marks and display punctuation */
+blockquote, q, .hanging-quote {
+  hanging-punctuation: first last allow-end;
+}
+
+/* Optical quote offset fallback for browsers lacking CSS hanging-punctuation */
+.hang-quote-hero {
+  text-indent: -0.42em;
+}
+
+/* Optical alignment of stage numerals */
+.stage-numeral {
+  font-variant-numeric: tabular-nums lining-nums;
+  letter-spacing: -0.02em;
+  display: inline-block;
+  min-width: 2.2ch;
+  text-align: right;
+}
+
+.font-data, code, kbd, time, .tabular {
+  font-family: var(--font-mono);
+  font-feature-settings: "tnum" 1, "zero" 1;
+  letter-spacing: -0.01em;
+}
+
+.hairline { border: 1px solid var(--color-hairline); }
+.hairline-b { border-bottom: 1px solid var(--color-hairline); }
+.hairline-t { border-top: 1px solid var(--color-hairline); }
+.hairline-r { border-right: 1px solid var(--color-hairline); }
+.hairline-l { border-left: 1px solid var(--color-hairline); }
+
+[id] { scroll-margin-top: 80px; }
+
+:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+::selection {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html, body {
+    scroll-behavior: auto;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

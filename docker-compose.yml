@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  # ----------------------------------------------------------------------------
+  # SYNEX Web Platform (Marketing Site + Trace Ledger + Static Client Island)
+  # ----------------------------------------------------------------------------
+  synex-site:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: synex-site
+    restart: unless-stopped
+    networks:
+      - synex-internal
+    expose:
+      - "80"
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:80/"]
+      interval: 15s
+      timeout: 3s
+      retries: 3
+    labels:
+      - "synex.tier=frontend"
+      - "synex.sovereignty=self-hosted"
+
+  # ----------------------------------------------------------------------------
+  # Existing Sovereign Backend Services
+  # ----------------------------------------------------------------------------
+  synex-gateway:
+    image: synex/gateway:v1.2.4
+    container_name: synex-gateway
+    restart: unless-stopped
+    networks:
+      - synex-internal
+    environment:
+      - MYSQL_URL=mysql://synex:synex_secret@mysql:3306/synex_ledger
+      - OLLAMA_HOST=http://ollama:11434
+    depends_on:
+      - mysql
+      - ollama
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: synex-ollama
+    restart: unless-stopped
+    networks:
+      - synex-internal
+    volumes:
+      - ollama_models:/root/.ollama
+
+  mysql:
+    image: mysql:8
+    container_name: synex-mysql
+    restart: unless-stopped
+    networks:
+      - synex-internal
+    environment:
+      MYSQL_ROOT_PASSWORD: root_secret
+      MYSQL_DATABASE: synex_ledger
+      MYSQL_USER: synex
+      MYSQL_PASSWORD: synex_secret
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+networks:
+  synex-internal:
+    driver: bridge
+    internal: false
+
+volumes:
+  mysql_data:
+  ollama_models:

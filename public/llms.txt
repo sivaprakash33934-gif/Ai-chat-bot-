@@ -1,0 +1,114 @@
+# SYNEX // Architecture Manifesto & Machine Ledger
+
+> Project: SYNEX Control Center & Commercial Action Engine
+> Specification: V1.2.4 (Enterprise Edition)
+> Protocol: Deterministic 11-Act Narrative Trace
+> Domain: High-velocity wholesale and B2B commerce operations
+
+---
+
+## 1. System Architecture Overview
+
+SYNEX is not a generative conversational chatbot. It is a deterministic commercial action engine and double-entry decision ledger for enterprise commerce operations. It replaces manual email/quotation triage with verifiable, audited pipelines.
+
+### The 11-Act Trace Lifecycle:
+- Act 0 (Ingestion): Raw inquiry capture across verified channels (EDI, ERP gateway, structured email).
+- Act 1 (Grounding): High-density RAG extraction with cosine similarity (>0.82) over private ERP/price catalogs.
+- Act 2 (Decomposition): Entity parse into strict commercial primitives (SKU, Quantity, Tier, Payment Terms).
+- Act 3 (The Stakes): Downstream impact analysis comparing autonomous risk vs manual intervention.
+- Act 4 (Rule Chain): Linear policy evaluation (e.g. discount ceilings, stock reservations, credit limits).
+- Act 5 (Permission Gate): Dual-key Ed25519 cryptographic authorization when policy limits are exceeded.
+- Act 6 (Execution): Deterministic side-effect dispatch (CRM opportunity, SAP reservation, PDF quote creation).
+- Act 7 (Handoff): Structured operational summary dispatched to human floor operators with complete context.
+- Act 8 (Measurement): Double-entry economic reconciliation verifying wholesale floor prices and net margins.
+- Act 9 (Self-Auditing): Continuous feedback loop documenting unindexed SKUs, knowledge gaps, and policy drifts.
+- Act 10 (Sovereignty): Air-gapped on-premises appliance specifications and zero external telemetry rules.
+- Act 11 (Commissioning): Production trace request pipeline and enterprise onboarding verification.
+
+---
+
+## 2. V1 Operational Boundaries & Invariants
+
+To eliminate hallucination risk and commercial liability, SYNEX enforces strict negative boundaries:
+
+1. Unsupervised WhatsApp Chatbots: NOT SUPPORTED IN V1.
+   Reason: Unconstrained free-form conversation causes un-audited commitments.
+2. Outbound Telephony & Voice Synthesis: EXCLUDED BY DESIGN.
+   Reason: Acoustic latency and non-deterministic interruption handling generate legal liability.
+3. Native Mobile Client Applications: NOT IN V1.
+   Reason: App store review cycles delay critical security fixes; web standard operates in air-gapped intranets.
+4. Generative Marketing Imagery: NON-GOAL.
+   Reason: SYNEX is an operational ledger, not a creative agency tool.
+5. Model Weight Fine-Tuning (LoRA / SFT): ZERO WEIGHT RETRAINING.
+   Reason: Embedding proprietary enterprise catalogs into model weights creates permanent exfiltration vectors.
+6. Autonomous Cash Disbursements / Refunds: HARD ZERO CEILING (Rs 0.00).
+   Reason: All outgoing funds require dual-key human supervisor clearance.
+
+---
+
+## 3. Core API Schemas & Data Contracts
+
+### Inquiry Ingestion Schema
+```json
+{
+  "$schema": "https://synex.dev/schemas/v1/inquiry.json",
+  "inquiry_id": "INQ-2026-98124",
+  "channel": "ENTERPRISE_INBOX",
+  "source_entity": "Senthil Traders",
+  "raw_text": "Need 400 units of 6mm brass hex nuts by Friday. Standard 30-day terms.",
+  "received_at": "2026-10-05T09:12:00Z"
+}
+```
+
+### Semantic Extraction Schema
+```json
+{
+  "$schema": "https://synex.dev/schemas/v1/extraction.json",
+  "intent": "COMMERCIAL_QUOTE_REQUEST",
+  "entities": {
+    "sku": "BRASS-HEX-6MM",
+    "quantity": 400,
+    "unit": "PIECES",
+    "required_by": "2026-10-09",
+    "payment_terms": "NET_30"
+  },
+  "confidence_score": 0.984
+}
+```
+
+### Policy Gate Schema
+```json
+{
+  "$schema": "https://synex.dev/schemas/v1/policy.json",
+  "rule_id": "POL-DISCOUNT-MAX",
+  "requested_discount": 0.12,
+  "allowed_threshold": 0.08,
+  "evaluation": "REQUIRE_HUMAN_GATE",
+  "gate_required": true,
+  "signing_algorithm": "Ed25519"
+}
+```
+
+### Execution Log Schema
+```json
+{
+  "$schema": "https://synex.dev/schemas/v1/action_log.json",
+  "execution_id": "EXE-77192",
+  "actions": [
+    { "target": "CRM", "action": "opportunity.create", "ref": "OPP-19284", "status": 201 },
+    { "target": "INVENTORY", "action": "stock.reserve", "ref": "RSV-7731", "status": 200 },
+    { "target": "DOCUMENTS", "action": "quotation.generate", "ref": "QT-4471.pdf", "status": 200 },
+    { "target": "ERP_WEBHOOK", "action": "erp.sync", "ref": "EVT-9912", "status": 200, "retries": 1 }
+  ]
+}
+```
+
+---
+
+## 4. Sovereignty, Privacy & Compliance Baseline
+
+- Font Assets: 100% self-hosted (Source Serif 4, JetBrains Mono).
+- Analytics & Telemetry: 0 third-party trackers, 0 cookies, 0 external analytics beacons.
+- Deployment Options: Pure on-premises appliance or VPC containerized cluster.
+- Page Weight Budget: Under 180KB total transfer size across all public pages.
+- Cryptography: Ed25519 digital signatures on all automated operational transitions.
