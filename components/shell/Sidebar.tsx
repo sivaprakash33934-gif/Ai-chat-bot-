@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
+  Bot,
   MessageSquare,
   CheckSquare,
   Users,
@@ -28,6 +29,7 @@ interface NavItemDef {
 
 const NAV_ITEMS: NavItemDef[] = [
   { label: "Overview", href: "/dashboard", icon: LayoutDashboard },
+  { label: "Assistant", href: "/dashboard/assistant", icon: Bot },
   { label: "Conversations", href: "/dashboard/conversations", icon: MessageSquare, badgeKey: "unresolvedConversations" },
   { label: "Work Queue", href: "/dashboard/queue", icon: CheckSquare, badgeKey: "needsAttention" },
   { label: "Customers", href: "/dashboard/customers", icon: Users },

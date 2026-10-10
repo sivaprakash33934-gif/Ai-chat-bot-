@@ -5,6 +5,7 @@ import Link from "next/link";
 import { OnboardingData } from "./types";
 import { Wrench, Users, Bot, Rocket, Check } from "lucide-react";
 import ChatWidget from "@/components/chat/ChatWidget";
+import { ReplayCompareLab } from "@/components/decision/ReplayCompareLab";
 
 interface StepProps {
   data: OnboardingData;
@@ -94,19 +95,54 @@ export function StepTeam({ data, onChange }: StepProps) {
 }
 
 export function StepTestAI() {
+  const [activeTestMode, setActiveTestMode] = React.useState<"chat" | "lab">("chat");
+
   return (
     <div className="space-y-4">
-      <div className="border-b border-hairline pb-2">
-        <h2 className="font-serif text-[20px] font-semibold text-ink flex items-center gap-2">
-          <Bot className="h-5 w-5 text-ink-muted" /> 06 Interactive Simulator
-        </h2>
-        <p className="font-mono text-[11px] text-ink-muted">
-          Test questions against the configured documents and rules before going live.
-        </p>
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-hairline pb-2">
+        <div>
+          <h2 className="font-serif text-[20px] font-semibold text-ink flex items-center gap-2">
+            <Bot className="h-5 w-5 text-ink-muted" /> 06 Interactive Simulator &amp; Test Lab
+          </h2>
+          <p className="font-mono text-[11px] text-ink-muted">
+            Test inquiries against configured documents, inspect decision receipts, or run differential test comparisons.
+          </p>
+        </div>
+        <div className="flex items-center gap-1 font-mono text-[11px]">
+          <button
+            type="button"
+            onClick={() => setActiveTestMode("chat")}
+            className={`rounded border px-2.5 py-1 transition-colors ${
+              activeTestMode === "chat"
+                ? "border-ink bg-ink text-paper font-semibold"
+                : "border-hairline bg-paper text-ink-muted hover:border-ink/40"
+            }`}
+          >
+            Chat Widget
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTestMode("lab")}
+            className={`rounded border px-2.5 py-1 transition-colors ${
+              activeTestMode === "lab"
+                ? "border-ink bg-ink text-paper font-semibold"
+                : "border-hairline bg-paper text-ink-muted hover:border-ink/40"
+            }`}
+          >
+            Replay &amp; Compare Lab
+          </button>
+        </div>
       </div>
-      <div className="rounded-[4px] border border-hairline bg-paper p-2">
-        <ChatWidget embedded={true} />
-      </div>
+
+      {activeTestMode === "chat" ? (
+        <div className="rounded-[4px] border border-hairline bg-paper p-2">
+          <ChatWidget embedded={true} />
+        </div>
+      ) : (
+        <div className="rounded-[4px] border border-hairline bg-paper-elevated p-4">
+          <ReplayCompareLab />
+        </div>
+      )}
     </div>
   );
 }

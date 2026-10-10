@@ -6,8 +6,9 @@ import { Zap, Wrench, History, AlertTriangle, CheckCircle2, Clock } from "lucide
 import { INITIAL_TOOL_DEFINITIONS, INITIAL_TOOL_EXECUTIONS, ToolExecution } from "@/lib/fixtures";
 import { ActionsToolsTab } from "./ActionsToolsTab";
 import { ActionsFailuresTab } from "./ActionsFailuresTab";
+import { BusinessDecisionLedger } from "@/components/decision/BusinessDecisionLedger";
 
-type ActionTab = "tools" | "executions" | "failures";
+type ActionTab = "tools" | "executions" | "failures" | "ledger";
 
 export function ActionsCenter() {
   const router = useRouter();
@@ -95,11 +96,26 @@ export function ActionsCenter() {
               </span>
             )}
           </button>
+
+          <button
+            type="button"
+            role="tab"
+            aria-selected={currentTab === "ledger"}
+            onClick={() => handleTabChange("ledger")}
+            className={`flex items-center gap-2 border-b-2 py-3 px-1 font-sans text-[14px] transition-colors ${
+              currentTab === "ledger" ? "border-ink font-semibold text-ink" : "border-transparent text-ink-muted hover:text-ink"
+            }`}
+          >
+            <History className="h-4 w-4" />
+            <span>Decision Ledger</span>
+          </button>
         </nav>
       </div>
 
       {/* Tab Panels */}
       {currentTab === "tools" && <ActionsToolsTab />}
+
+      {currentTab === "ledger" && <BusinessDecisionLedger />}
 
       {currentTab === "executions" && (
         <div className="space-y-4">

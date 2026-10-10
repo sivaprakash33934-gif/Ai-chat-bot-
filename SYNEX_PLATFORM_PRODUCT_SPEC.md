@@ -1,118 +1,111 @@
 # SYNEX Platform — Master Product Specification
 
-## 1. Executive Summary & SaaS Evolution Vision
+## 1. Executive Summary & SaaS Platform Identity
 
-### 1.1 The Core Proposition
-SYNEX is an enterprise-grade Autonomous Commerce & Decision Control Center (currently operating in frontend prototype mode with simulated execution events). It bridges unstructured commercial interactions (inbound RFQs, chat negotiations, web inquiries) with deterministically enforced operational rules, verified multi-tier knowledge bases, and audited transactional mutations.
+### 1.1 Product Identity
+- **Product Name**: SYNEX
+- **Category**: Controlled AI Business Assistant, Knowledge Platform & Action Engine.
+- **Core Principle**:
+  $$\text{KNOW} \longrightarrow \text{UNDERSTAND} \longrightarrow \text{REASON} \longrightarrow \text{DECIDE} \longrightarrow \text{ACT} \longrightarrow \text{MEASURE} \longrightarrow \text{IMPROVE}$$
 
-Unlike probabilistic conversational agents that hallucinate prices or act without boundaries, SYNEX operates under an immutable governing philosophy:
-$$\text{INGEST} \longrightarrow \text{GROUND} \longrightarrow \text{PARSE} \longrightarrow \text{CHECK} \longrightarrow \text{APPROVE} \longrightarrow \text{ACT} \longrightarrow \text{AUDIT}$$
+SYNEX enables a business to configure an AI assistant that:
+1. Answers questions strictly using approved business knowledge with source citations.
+2. Understands customer intent and permitted customer context.
+3. Evaluates business rules and margin thresholds before making recommendations.
+4. Executes only configured, authorized actions (deterministic mutations).
+5. Requests human approval when a configured boundary is crossed.
+6. Hands unresolved cases to a human operator with preserved context.
+7. Records outcomes, audits actions, and makes knowledge gaps visible.
+8. Provides an embeddable customer-facing website chat widget.
+9. Provides a high-density Control Center to manage knowledge, permissions, actions, and quality.
 
-Every computational action writes an irreversible record (demonstrated via simulated immutable append-only ledgers; production cryptographic Merkle trees/HSM are planned enterprise integrations). Every discount concession evaluates hard contribution margins before dispatch. High-uncertainty queries trigger zero-cost operational handoffs to humans rather than generating ungrounded estimates.
-
-### 1.2 The SaaS Expansion Matrix
-The platform evolves from an 11-Act narrative product showcase into a multi-tenant, role-gated SaaS operating system containing two interconnected planes:
-1. **The Public & Marketing Plane**: The 11-Act live execution trace, documentation, sovereign deployment limits, and commercial onboarding.
-2. **The Control Center (Operator & Admin Plane)**: A high-density, keyboard-first operations workspace providing live oversight across conversations, human-in-the-loop permission gates, inventory/ERP mutations, knowledge authority resolution, and simulated cryptographic audit logs (with enterprise production attestation as an upcoming integration).
-
----
-
-## 2. Platform Architecture & Data Flow
-
-```mermaid
-flowchart TD
-    subgraph Inbound Channels
-        C1["Website Chat Widget (Embedded / Popover)"]
-        C2["Inbound Webhook API (ERP/CRM)"]
-        C3["Commercial RFQ Web Form"]
-    end
-
-    subgraph Decision Engine [SYNEX Core Engine]
-        direction TB
-        E1["Grounding Ledger\n(bge-large-en-v1.5 / Qdrant)"]
-        E2["Semantic Parse & Typings\n(Deterministic Regex & AST)"]
-        E3["Policy Ladder\n(Hard Floor & Volume Ceilings)"]
-        E4{"Permission Gate"}
-        E5["Margin Revalidation\n(Contribution >= 18%)"]
-        E6["Idempotent Tool Execution\n(ERP, CRM, Stock Locks)"]
-    end
-
-    subgraph Operator Control Center
-        D1["Conversations Directory & Active Drawer"]
-        D2["Work Queue & Approvals Gate"]
-        D3["Knowledge Authority & Conflict Resolver"]
-        D4["Immutable Audit & Sovereignty Ledger"]
-    end
-
-    C1 & C2 & C3 --> E1
-    E1 --> E2 --> E3 --> E4
-    E4 -- "Autonomous <= 8%" --> E5 --> E6
-    E4 -- "Exception > 8%" --> D2
-    D2 -- "Manager Action" --> E5
-    E1 -. "Corpus Conflict" .-> D3
-    E6 --> D4
-    E2 & E4 -. "Unmapped / Ambiguous" .-> D1
-```
+> **Positioning Rule**: SYNEX is **never** positioned as an unrestricted autonomous agent or a generic chatbot builder. It is a controlled AI Business Assistant and Action Engine.
 
 ---
 
-## 3. Core Information Architecture & Route Topology
+## 2. Technical Stack & Hardware Constraints
 
-The system comprises 36 prerendered static routes adhering to static export constraints:
+- **Frontend**: Next.js 14 (App Router, static export `out/` capable), React 18, Strict TypeScript, Tailwind CSS, Framer Motion (with `prefers-reduced-motion` zero-delay support), Lucide icons.
+- **Backend Architecture (Target Platform)**:
+  - Node.js & TypeScript service (Fastify / NestJS).
+  - Python FastAPI for the AI microservice where applicable.
+  - **Relational DB**: MySQL 8 (separately hosted).
+  - **Vector DB**: Qdrant.
+  - **Cache & Queue**: Redis.
+  - **Local LLM Inference**: Ollama running locally (CPU-only, `bge-large-en-v1.5` embeddings, quantized models).
+  - **Reverse Proxy**: Nginx.
+  - **Containerization**: Docker & Docker Compose.
+- **Hardware Constraints**:
+  - 64 GB RAM.
+  - Two 1 TB NVMe SSDs.
+  - No GPU (Ollama inference runs entirely on CPU).
+- **Security & Multi-Tenancy Invariant**:
+  - The browser communicates solely through authenticated endpoints.
+  - Never connect the browser directly to MySQL, Qdrant, or privileged Ollama APIs.
+  - Client-side tenant IDs are never treated as authorization boundaries. Server-side session verification is mandatory.
 
-### 3.1 Public & Narrative Routes
-- `/`: The 11-Act Execution Trace (Act 0 Hero $\rightarrow$ Act 11 Open a Trace), Three-Step Overview Strip, Trust Control Strip, Footers, and Embedded Sovereign Chat Widget.
+---
+
+## 3. Design System Tokens (The Editorial Ledger)
+
+Preserve the established editorial, minimal, warm-neutral visual direction across both the marketing site and the Control Center:
+- **Canvas / Paper**: `#FBFBF9` (`bg-paper`)
+- **Elevated Surfaces**: `#FFFFFF` (`bg-paper-elevated`)
+- **Primary Ink**: `#121210` (`text-ink`, `border-ink`)
+- **Muted Text**: `#54565A` (`text-ink-muted`)
+- **Faint Text**: `#8A8D91` (`text-ink-faint`)
+- **Hairline Border**: `rgba(18, 18, 16, 0.12)` (`border-hairline`)
+- **Amber Accent (Attention / Gate)**: `#D97706` (`border-amber`, `text-amber`, `bg-amber-tint`)
+- **Success (Verification / Safe)**: `#15803D` (`text-success`, `border-success`, `bg-emerald-50`)
+- **Error (Violation / Action Blocked)**: `#B3261E` (`text-error`, `border-error`, `bg-rose-50`)
+
+### Typography
+- **Headlines**: Newsreader / Serif (`font-serif`).
+- **UI & Body**: Inter (`font-sans`).
+- **Technical & Metric Data**: JetBrains Mono (`font-mono`, `tabular-nums`).
+
+### Visual Rules
+- Comfortable whitespace, 1px hairline borders, restrained shadows (`box-shadow: none`).
+- No neon, no gratuitous gradients, no default glassmorphism.
+- Outline icons from Lucide.
+- WCAG 2.2 AA contrast targets, minimum 44×44 CSS px touch targets.
+- Instant motion resolution for `prefers-reduced-motion`.
+
+---
+
+## 4. Platform Information Architecture & Route Topology
+
+### 4.1 Public Marketing & Narrative Routes
+- `/`: The 11-Act Interactive Execution Trace (Act 0 Hero $\to$ Act 11 Open a Trace), Three-Step Overview Strip, Trust Control Strip, Footers, and Embedded Sovereign Chat Widget.
 - `/docs`: Enterprise Documentation including Architecture Topology (`#architecture`), Terminology Glossary (`#glossary`), and Self-Hosted Deployment (`#deployment`).
 - `/limits`: Non-goals, hardware boundaries, and architectural exclusions.
 - `/about`: Company philosophy, founder principles, and local-first sovereign AI manifesto.
-- `/changelog`: Formal ledger of platform releases (P0, P1, P2, and V1.3.x entries).
-- `/partners`: Partner and integrator certified network directory.
+- `/changelog`: Formal ledger of platform releases.
+- `/partners`: Partner and certified integrator directory.
 - `/login`: Role-gated credential-free authentication simulation (`ops_lead`, `owner`, `viewer`).
 - `/onboarding`: 7-Step deterministic Guided Provisioning Wizard (`Business`, `Knowledge`, `Rules`, `Actions`, `Team`, `Test AI`, `Go Live`).
 - `/embed`: Standalone embeddable preview of the chat widget.
 
-### 3.2 Operator Control Center (`/dashboard/*`)
-- `/dashboard`: Executive cockpit summary (Conversations, Approvals, Knowledge Health, Margin Telemetry).
-- `/dashboard/today`: *Legacy Redirect Route* $\rightarrow$ redirects cleanly to `/dashboard`.
-- `/dashboard/conversations`: Filterable live communication threads (Website Chat / API Webhook / Web Form) with full message timeline and context dossier.
-- `/dashboard/queue`: Unified operational task queue categorizing pending approvals, unmapped gaps, and handoffs.
-- `/dashboard/approvals`: Intercepted transactions requiring Level 2 authority sign-off with dynamic margin preview.
-- `/dashboard/customers`: Enterprise CRM account directory with GSTIN verification, credit limits, and historical orders.
-- `/dashboard/customers/[id]`: Detailed customer record dossiers with account history and order logs.
-- `/dashboard/knowledge`: Knowledge base sources repository with PRIMARY/SECONDARY authority designation, sync states, and corpus conflict resolution.
-- `/dashboard/actions`: Idempotent tool execution logs showing durations, payloads, retry lifecycles, and 504 recovery.
-- `/dashboard/rules`: Visual policy builder for commercial thresholds, autonomous discount limits, and role gates.
-- `/dashboard/insights`: Unit economics analytics, autonomous conversion yield, and compute cost ledger.
-- `/dashboard/admin`: System settings, tenant isolation profiles, local Ollama configurations, and immutable audit logs.
-- `/dashboard/audit`: *Legacy Redirect Route* $\rightarrow$ redirects cleanly to `/dashboard/admin` (Audit Log tab).
-- `/dashboard/handoff`: *Legacy Redirect Route* $\rightarrow$ redirects cleanly to `/dashboard/queue`.
-- `/dashboard/leads`: *Legacy Redirect Route* $\rightarrow$ redirects cleanly to `/dashboard/conversations`.
+### 4.2 Customer Control Center (`/dashboard/*`)
+1. **Overview** (`/dashboard`): Real-time executive cockpit answering: Is the assistant live? Is it working correctly? What requires attention? What usage/cost data is available?
+2. **Conversations** (`/dashboard/conversations`): Searchable, filterable omnichannel inbox with transcript inspection, source citations, context dossiers, and operator takeover.
+3. **Work Queue** (`/dashboard/queue`): Unified operational task queue categorizing pending approvals, unmapped gaps, and handoffs.
+4. **Approvals** (`/dashboard/approvals`): Intercepted transactions requiring Level 2 authority sign-off with dynamic margin preview.
+5. **Customers** (`/dashboard/customers`, `/dashboard/customers/[id]`): Enterprise CRM directory with GSTIN verification, credit limits, and account history.
+6. **Knowledge Base** (`/dashboard/knowledge`): Source repository with PRIMARY/SECONDARY authority, sync states, Unanswered Question inbox, and Conflict Resolver.
+7. **Actions Engine** (`/dashboard/actions`): Idempotent tool definitions, live execution logs, durations, payload digests, and failure recovery.
+8. **Rules & Permissions** (`/dashboard/rules`): Visual policy builder for commercial thresholds, autonomous discount limits, and role gates.
+9. **Business Insights & AI Health** (`/dashboard/insights`): Unit economics, autonomous conversion yield, compute cost ledger, and latency/retrieval telemetry.
+10. **Admin & Settings** (`/dashboard/admin`): System settings, team RBAC, tenant isolation profiles, Docker Compose configuration, and immutable audit logs.
+11. **Legacy Safe Redirects**:
+    - `/dashboard/today` $\to$ `/dashboard`
+    - `/dashboard/audit` $\to$ `/dashboard/admin?tab=audit`
+    - `/dashboard/handoff` $\to$ `/dashboard/queue?tab=handoffs`
+    - `/dashboard/leads` $\to$ `/dashboard/conversations`
 
 ---
 
-## 4. Design System Tokens (The Editorial Ledger)
-
-SYNEX enforces the **Editorial Ledger** visual identity across both public marketing pages and dashboard views:
-- **Canvas / Paper**: `#FBFBF9` (`bg-paper`)
-- **Elevated Surfaces**: `#FFFFFF` (`bg-paper-elevated`)
-- **Ink Primary**: `#121210` (`text-ink`, `border-ink`)
-- **Ink Muted / Secondary**: `#54565A` (`text-ink-muted`)
-- **Ink Faint**: `#8A8D91` (`text-ink-faint`)
-- **Hairline Borders**: `rgba(18, 18, 16, 0.12)` (`border-hairline`)
-- **Attention / Gate (Amber)**: `#D97706` (`border-amber`, `text-amber`, `bg-amber-tint`)
-- **Verification / Success (Green)**: `#15803D` (`text-success`, `border-success`, `bg-emerald-50`)
-- **Violation / Error (Red)**: `#B3261E` (`text-error`, `border-error`, `bg-rose-50`)
-
-### Styling Invariants
-1. Zero gratuitous shadows (`box-shadow: none !important`).
-2. Hairline borders (1px solid).
-3. Tabular numerals (`tabular-nums`) on all monetary and statistical data.
-4. Serif headings (`Newsreader` / `Source Serif 4`) paired with monospace data tags (`JetBrains Mono`).
-5. Complete adherence to `prefers-reduced-motion` with instant state resolution.
-
----
-
-## 5. Honesty Contract & Boundary Governance
+## 5. Content Honesty Contract & Boundary Governance
 
 All UI metrics, simulated logs, and integration statuses strictly adhere to `lib/content-contract.ts`:
 1. **Demo Honesty**: All synthetic transactions, simulated embeddings, and demonstration benchmarks carry explicit `[DEMO]` or `[SIMULATED REPLAY]` labels.
@@ -122,3 +115,4 @@ All UI metrics, simulated logs, and integration statuses strictly adhere to `lib
    - Act 9 isolates the conflict demonstration to `8MM-BRS-FTG` to preserve the zero-conflict guarantee of principal SKU `6MM-BRS-FTG`.
    - Act 11 displays truthful submission feedback: `"Demo submission complete — no request sent"`.
 3. **Database & Infrastructure**: Local self-hosted inference (Ollama CPU-only, MySQL 8, Qdrant vector store). No claims of live cloud models or unverified certifications.
+4. **Zero Hallucination Guarantee**: If knowledge retrieval yields confidence below threshold, the assistant acknowledges the gap and routes to human handoff rather than guessing.

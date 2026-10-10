@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { AlertCircle, RotateCcw, ArrowUpRight, CheckCircle2 } from "lucide-react";
 import { ToolExecution } from "@/lib/fixtures";
+import { ActionLifecycle } from "@/components/action/ActionLifecycle";
 
 interface ActionsFailuresTabProps {
   executions: ToolExecution[];
@@ -87,6 +88,21 @@ export function ActionsFailuresTab({ executions, onRetry }: ActionsFailuresTabPr
                 <pre className="rounded border border-hairline bg-paper p-2.5 font-mono text-[11px] text-ink-muted overflow-x-auto">
                   {JSON.stringify(item.parameters, null, 2)}
                 </pre>
+              </div>
+
+              {/* Action Lifecycle Control Flow */}
+              <div className="pt-2">
+                <ActionLifecycle
+                  actionId={item.id}
+                  actionTitle={item.toolName}
+                  targetSystem={item.toolSlug === "erp_webhook" ? "SAP ECC / S4HANA Gateway" : "Internal CRM Gateway"}
+                  currentState={item.status === "failed" ? "FAILED" : "RETRY AVAILABLE"}
+                  nextResponsibleRole="Operations Lead (Level 2)"
+                  requiredApproval="Manual Recovery Sign-off"
+                  timestamp={item.timestamp}
+                  onRetry={() => handleRetryClick(item.id)}
+                  onHold={() => alert(`[DEMO] Action ${item.id} placed in hold inspection queue.`)}
+                />
               </div>
 
               {/* Actions Footer */}

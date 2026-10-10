@@ -3,6 +3,8 @@
 import React from "react";
 import { X, ExternalLink, ShieldCheck, UserCheck, CheckCircle2 } from "lucide-react";
 import { ConversationRecord } from "@/lib/fixtures";
+import { DecisionReceipt } from "@/components/decision/DecisionReceipt";
+import { MissingEvidencePanel } from "@/components/decision/MissingEvidencePanel";
 
 interface ConversationDrawerProps {
   conversation: ConversationRecord | null;
@@ -96,11 +98,61 @@ export function ConversationDrawer({ conversation, onClose, onTakeOver }: Conver
                       <span>Action: {msg.actionTaken}</span>
                     </div>
                   )}
+
+                  {/* Decision Receipt integration for transparent audit */}
+                  {isAi && (
+                    <div className="mt-3 pt-2 border-t border-hairline">
+                      <DecisionReceipt
+                        id={`REC-${conversation.id}-${idx}`}
+                        question={conversation.summary}
+                        outcome={
+                          conversation.status === "handoff_pending" || conversation.status === "handoff_claimed"
+                            ? "NEEDS HUMAN"
+                            : "ALLOWED"
+                        }
+                        ruleCitation="Credit Policy v3.1 & Rule RL-01"
+                        requiredApproval={
+                          conversation.status === "handoff_pending"
+                            ? "Level 2 Ops Lead Sign-off"
+                            : "Autonomous Execution"
+                        }
+                        proposedAction={msg.actionTaken || "Information Grounding"}
+                        evidence={(msg.citations || []).map((c, cIdx) => ({
+                          documentTitle: c,
+                          documentId: `DOC-${cIdx + 101}`,
+                          authority: cIdx === 0 ? "PRIMARY" : "SECONDARY",
+                          lastVerified: "Today, 09:00 IST",
+                          excerpt: "Approved corporate rates and standard volume schedule.",
+                        }))}
+                        unresolvedUncertainty={
+                          conversation.status === "handoff_pending"
+                            ? "Customer requested non-standard terms not found in pre-approved rate sheet."
+                            : undefined
+                        }
+                      />
+                    </div>
+                  )}
                 </div>
               );
             })}
           </div>
         </div>
+
+        {/* Missing Evidence Banner for escalated conversations */}
+        {isPending && (
+          <MissingEvidencePanel
+            question={conversation.summary}
+            missingInformation={[
+              "Net-30 / Net-45 credit underwriting approval for custom dispatch",
+              "Freight surcharge confirmation to non-standard destination pin code",
+            ]}
+            checkedSources={[
+              { title: "Master Price List Q4 FY26", id: "KS-101", status: "Checked · Primary" },
+              { title: "Credit Terms & Cash Discount Policy v3.1", id: "KS-102", status: "Checked · 30-day limit" },
+            ]}
+            onAskHuman={() => onTakeOver(conversation.id)}
+          />
+        )}
       </div>
 
       {/* Drawer Action Footer */}

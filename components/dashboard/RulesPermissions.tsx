@@ -14,6 +14,7 @@ import {
 import { useDashboardStore } from "@/lib/store";
 import { Rule } from "@/lib/fixtures";
 import { RiskPill, StatusBadge } from "./ui";
+import { PermissionPreview } from "@/components/decision/PermissionPreview";
 
 export function RulesPermissions() {
   const { rules, updateRule, role } = useDashboardStore();
@@ -374,6 +375,11 @@ export function RulesPermissions() {
             </tbody>
           </table>
         </div>
+      </section>
+
+      {/* Distinctive Experience: Role Permission Preview & Matrix */}
+      <section className="space-y-4">
+        <PermissionPreview />
       </section>
     </div>
   );

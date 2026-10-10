@@ -47,6 +47,81 @@ export function Knowledge() {
         </p>
       </div>
 
+      {/* Distinctive Experience: Evidence Freshness & Conflict Overview */}
+      <section aria-labelledby="freshness-overview-title" className="border border-hairline bg-paper-elevated p-5 space-y-4">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-hairline pb-3">
+          <div>
+            <h2 id="freshness-overview-title" className="font-serif text-[18px] font-semibold text-ink">
+              Evidence Freshness &amp; Conflict Overview
+            </h2>
+            <p className="font-sans text-[12px] text-ink-muted">
+              Live audit of document authority tiers, sync currency, and pending reconciliation items.
+            </p>
+          </div>
+          <span className="font-mono text-[10px] text-ink-muted border border-hairline bg-paper px-2 py-0.5">
+            [GROUNDING MONITOR]
+          </span>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono text-[11px]">
+          {/* Card 1: Authority Tiers */}
+          <div className="border border-hairline bg-paper p-3 space-y-1">
+            <span className="text-[10px] text-ink-faint uppercase">Authority Breakdown</span>
+            <div className="text-lg font-bold text-ink">
+              {knowledgeSources.filter((s) => s.authority === "PRIMARY").length} Primary /{" "}
+              {knowledgeSources.filter((s) => s.authority === "SECONDARY").length} Secondary
+            </div>
+            <p className="text-[11px] text-ink-muted font-sans">Primary sources supersede secondaries on price &amp; terms</p>
+          </div>
+
+          {/* Card 2: Freshness State */}
+          <div className="border border-hairline bg-paper p-3 space-y-1">
+            <span className="text-[10px] text-ink-faint uppercase">Document Freshness</span>
+            <div className="text-lg font-bold text-success">
+              {knowledgeSources.filter((s) => s.status === "fresh").length} Fresh ·{" "}
+              <span className="text-amber">{knowledgeSources.filter((s) => s.status === "stale").length} Stale</span>
+            </div>
+            <p className="text-[11px] text-ink-muted font-sans">
+              {knowledgeSources.find((s) => s.status === "stale")?.title.slice(0, 24)}... needs re-indexing
+            </p>
+          </div>
+
+          {/* Card 3: Unresolved Conflicts */}
+          <a
+            href="#conflicts"
+            className="border border-hairline bg-paper p-3 space-y-1 block hover:border-error/50 transition-colors group"
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] text-ink-faint uppercase">Corpus Conflicts</span>
+              <span className="text-[10px] text-error font-bold">Inspect &darr;</span>
+            </div>
+            <div className="text-lg font-bold text-error">
+              {knowledgeConflicts.filter((c) => c.status === "unresolved").length} Unresolved
+            </div>
+            <p className="text-[11px] text-ink-muted font-sans group-hover:text-ink">
+              Conflicting rules requiring human authority resolution
+            </p>
+          </a>
+
+          {/* Card 4: Unanswered Gaps */}
+          <a
+            href="#gaps"
+            className="border border-hairline bg-paper p-3 space-y-1 block hover:border-amber/50 transition-colors group"
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] text-ink-faint uppercase">Unanswered Gaps</span>
+              <span className="text-[10px] text-amber font-bold">Review &darr;</span>
+            </div>
+            <div className="text-lg font-bold text-amber">
+              {knowledgeGaps.length} In Queue
+            </div>
+            <p className="text-[11px] text-ink-muted font-sans group-hover:text-ink">
+              Recent buyer questions with missing source evidence
+            </p>
+          </a>
+        </div>
+      </section>
+
       {/* Section 1: Business Documents Table */}
       <section className="space-y-4">
         <div className="flex items-center justify-between border-b border-hairline pb-2.5">
@@ -115,7 +190,7 @@ export function Knowledge() {
       </section>
 
       {/* Section 2: Unanswered Questions (Unmapped Gaps) */}
-      <section className="space-y-4">
+      <section id="gaps" className="space-y-4 scroll-mt-20">
         <div className="flex items-center justify-between border-b border-hairline pb-2.5">
           <div className="flex items-center gap-2">
             <HelpCircle className="h-4 w-4 text-amber" />
@@ -181,7 +256,7 @@ export function Knowledge() {
       </section>
 
       {/* Section 3: Fix Conflicting Info (Conflict Resolver) */}
-      <section className="space-y-4">
+      <section id="conflicts" className="space-y-4 scroll-mt-20">
         <div className="flex items-center justify-between border-b border-hairline pb-2.5">
           <div className="flex items-center gap-2">
             <AlertTriangle className="h-4 w-4 text-error" />
